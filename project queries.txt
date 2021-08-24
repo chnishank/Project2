@@ -1,0 +1,36 @@
+
+1896-2006
+       5 for each
+       
+       Easy    -  3
+       Medium  -  2
+
+
+       shetu:
+              1) write a query to count Females participated in year 2004 from India
+                
+              2) Who are the top 10 youngest athletes to ever compete in the Games?
+              3) In which year women started to enter into olympics
+
+              4) count the number of male and female participants in each sport
+              5) in every year females count from each country
+
+      sravani:
+              1) write a query to display distinct Sports in olympics
+              2) no of females that have participated in olympics till now
+              3) how many gold medals indian won till 2016
+              4) Find out the number of participants in each sport of every country(country,sport,no_of_participants)
+              5) all indian player names sport,gold,silver,bronze
+
+      Ankit:
+             1) write a query to display distinct player their country from India
+             2) display max weight of all time in olympics
+             3) which country received most medals in 2004
+             4) In which sport Indian won most medals from 1896-2006
+             5) in each year, for each country count of male and female     
+      Nishank:
+             1) write a query to display distinct years olympics held
+             2) write a query to display distinct countries participated in olympics
+             3) which year india got most medals
+             4) individual player their gold,silver,bronze,country
+             5) individual country their medals(gold,silver,bronze) from 1896-2006
