@@ -56,15 +56,41 @@ spark.sql(query).show(10,truncate=False)
        Easy    -  3
        Medium  -  2
 
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+   Shetu:
+-----------------------------------------------------------------------------------------------
 
-       shetu:
-              1) write a query to count Females participated in year 2004 from India
-                
-              2) Who are the top 10 youngest athletes to ever compete in the Games?
-              3) In which year women started to enter into olympics
+1) write a query to Count Female participants in year 2004 from India?
+->SELECT COUNT(*)  FROM athlete 
+WHERE Year='2004' and 
+Sex='F' and NOC in ('IND')
+-----------------------------------------------------------------------------------------------             
+2) Who are the top 10 youngest athletes to ever compete in the Games?
+->SELECT name, age, city,Sport FROM athlete WHERE Age<>'NA' ORDER BY age Asc LIMIT 10; #need to check
 
-              4) count the number of male and female participants in each sport
-              5) in every year females count from each country
+------------------------------------------------------------------------------------------------
+3) In which year women started to enter into olympics
+->SELECT Name,Year FROM athlete WHERE Sex='F' ORDER BY Year Asc LIMIT 1
+-------------------------------------------------------------------------------------------------
+
+4) Count the number of male and female participants in each sport
+->SELECT Sport, Count(Name)as Female_Count FROM athlete WHERE Sex='F' GROUP BY Sport 
+->SELECT Sport, Count(Name)as Male_Count FROM athlete WHERE Sex='M' GROUP BY Sport  
+------------------------------------------------------------------------------------------------
+5) Count the no of Females Participants from each country in every year
+
+  Year   Country   Female_Count
+  1998    USA       34
+  1998    IRQ       25
+  1998    KOR       45
+
+->SELECT Year,NOC as Country, Count(*) as Total_Female_Count FROM athlete WHERE Sex='F' GROUP BY NOC,Year order by Year
+------------------------------------------------------------------------------------------------
+6.How many Indian took participated in every year?
+
+->SELECT Year,Count(*) as Total_Participants FROM athlete WHERE NOC='IND' GROUP BY Year ORDER BY Year Asc 
+-------------------------------------------------------------------------------------------------
 
 ---------sravani--------------------------------------------------------------
 1) write a query to display distinct Sports in olympics
