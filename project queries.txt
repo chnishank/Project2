@@ -104,24 +104,24 @@ SELECT ROW_NUMBER() OVER(order by Total desc,Gold desc,Silver desc,Bronze desc) 
        IFNULL(Bronze,0) AS Bronze
 FROM (((SELECT Team AS Country,count(Medal) AS Total
         FROM athlete
-        WHERE Medal IN ('Gold','Silver','Bronze') AND year=1948
+        WHERE Medal IN ('Gold','Silver','Bronze') AND year=1912
         GROUP BY  Team) a0
      LEFT JOIN     
         (SELECT Team,count(Medal) AS Gold
          FROM athlete
-         WHERE Medal='Gold' AND year=1948
+         WHERE Medal='Gold' AND year=1912
          GROUP BY  Team) a1
      ON Country=a1.Team) p
      LEFT JOIN   
          (SELECT Team,count(Medal) AS Silver    
           FROM athlete
-          WHERE Medal='Silver' AND year=1948
+          WHERE Medal='Silver' AND year=1912
           GROUP BY  Team) a2
      ON Country=a2.Team) q  
      LEFT JOIN  
           (SELECT Team,count(Medal) AS Bronze
            FROM athlete 
-           WHERE Medal='Bronze' AND year=1948       
+           WHERE Medal='Bronze' AND year=1912       
            GROUP BY  Team) a3
       ON Country=a3.Team   
 ORDER BY  Rank
