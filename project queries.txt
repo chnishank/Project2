@@ -66,50 +66,20 @@ spark.sql(query).show(10,truncate=False)
               4) count the number of male and female participants in each sport
               5) in every year females count from each country
 
-      sravani:
-              1) write a query to display distinct Sports in olympics
+---------sravani--------------------------------------------------------------
+1) write a query to display distinct Sports in olympics
                 
-                 from pyspark.sql import SparkSession
-                 spark=SparkSession.builder.appName('Spark started').getOrCreate()
-                 from pyspark.sql.types import StructType,StringType, IntegerType 
-                 from pyspark.sql.types import StructType,StringType, IntegerType 
-                 schema = StructType() \
-                        .add("ID",IntegerType(),True) \
-                        .add("Name",StringType(),True) \
-                        .add("Sex",StringType(),True) \
-                        .add("Age",IntegerType(),True) \
-                        .add("Height",IntegerType(),True) \
-                        .add("Weight",IntegerType(),True)\
-                        .add("Team",StringType(),True) \
-                        .add("NOC",StringType(),True) \
-                        .add("Games",StringType(),True) \
-                        .add("Year",IntegerType(),True) \
-                        .add("Season",StringType(),True) \
-                        .add("City",StringType(),True) \
-                        .add("Sport",StringType(),True) \
-                        .add("Event",StringType(),True) \
-                        .add("Medal",StringType(),True)
-                 df= spark.read.format("csv") \
-                    .option("header", True) \
-                    .schema(schema) \
-                    .load("C:/p2/athlete_events.csv")
-                 df.printSchema()
-                 df.show(truncate=False)
-                 df.createOrReplaceTempView("athlete")
-                 
                  query="select distinct sport from athlete"
                  spark.sql(query).show(100,truncate=False)
 
-
-
-              2) no of females that have participated in olympics
+2) no of females that have participated in olympics
                  
                  query="select year,count(sex) as Females from athlete \
                  where sex='F' group by sex,year order by year"
                  spark.sql(query).show(10,truncate=False)
 
 
-              3) how many gold medals indian won in 2016
+3) how many gold medals indian won in 2016
                    
                  query="select year,count(medal) as Gold from athlete \
                  where team='India' and medal='Gold' group by year order by year"
@@ -117,14 +87,14 @@ spark.sql(query).show(10,truncate=False)
 
 
 
-              4) count the number of participants in each sport(sport,no_of_participants)
+4) count the number of participants in each sport(sport,no_of_participants)
 
                  query=query="select s as sport,F,M from (select sport as s,year,count(sex) as F from athlete where sex='F' and year='2016' group by sport,year) p \
                  full join \
                  (select sport as sp,year,count(sex) as M from athlete where sex='M' and year='2016' group by sport,year) on s=sp"
                  spark.sql(query).show(100,truncate=False) 
 
-              5) dispaly details of indian players,who won gold,silver,bronze
+5) dispaly details of indian players,who won gold,silver,bronze
 
 
                  query="select ROW_NUMBER() OVER(order by Total desc,Gold desc,Silver desc,Bronze desc) AS Rank,Name,Sex,Total as Total_Medals,IFNULL(Gold,0) as Gold,IFNULL(Silver,0) as Silver,IFNULL(Bronze,0) as Bronze,Sport,Team as Country \
