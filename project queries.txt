@@ -1,4 +1,55 @@
 
+
+from pyspark.sql import SparkSession
+from pyspark.sql.types import StructType,StringType, IntegerType 
+
+spark=SparkSession.builder.appName('Spark started').getOrCreate()
+
+schema = StructType() \
+    .add("ID",IntegerType(),True) \
+    .add("Name",StringType(),True) \
+    .add("Sex",StringType(),True) \
+    .add("Age",IntegerType(),True) \
+    .add("Height",IntegerType(),True) \
+    .add("Weight",IntegerType(),True)\
+    .add("Team",StringType(),True) \
+    .add("NOC",StringType(),True) \
+    .add("Games",StringType(),True) \
+    .add("Year",IntegerType(),True) \
+    .add("Season",StringType(),True) \
+    .add("City",StringType(),True) \
+    .add("Sport",StringType(),True) \
+    .add("Event",StringType(),True) \
+    .add("Medal",StringType(),True)
+
+noc_schema = StructType() \
+    .add("NOC",StringType(),True) \
+    .add("region",StringType(),True) \
+    .add("notes",StringType(),True) 
+    
+
+
+df= spark.read.format("csv") \
+      .option("header", True) \
+      .schema(schema) \
+      .load("C:/ajaysir/P2/P2/athlete_events.csv")
+
+df_noc= spark.read.format("csv") \
+      .option("header", True) \
+      .schema(noc_schema) \
+      .load("C:/ajaysir/P2/P2/noc_regions.csv")
+
+df.createOrReplaceTempView("athlete")
+df_noc.createOrReplaceTempView("noc")
+
+query="select * from athlete"
+spark.sql(query).show(10,truncate=False)
+
+
+
+---------------------------------------------------------------------------------------------------
+
+
 1896-2006
        5 for each
        
@@ -101,10 +152,108 @@
              2) display max weight of all time in olympics
              3) which country received most medals in 2004
              4) In which sport Indian won most medals from 1896-2006
-             5) in each year, for each country count of male and female     
-      Nishank:
-             1) write a query to display distinct years olympics held
-             2) write a query to display distinct countries participated in olympics
-             3) which year india got most medals
-             4) individual player their gold,silver,bronze,country
-             5) individual country their medals(gold,silver,bronze) from 1896-2006
+             5) in each year, for each country count of male and female  
+
+
+
+   
+---------------Nishank---------------
+
+
+1) write a Query to display all years in which olympics held.
+Query:
+SELECT DISTINCT year
+FROM athlete
+ORDER BY  year 
+
+
+2) write a Query to display all the Countries participated in olympics from 1896-2006.
+Query:
+SELECT DISTINCT region AS Country
+FROM noc
+ORDER BY  Country 
+
+
+3) Write a Query to find in which year India got most medals.
+Query:
+SELECT year, count(medal) AS Total_Medals
+FROM athlete
+WHERE medal IN ('Gold','Silver','Bronze') AND Team='India'
+GROUP BY  year
+ORDER BY  Total_Medals DESC 
+
+
+4) Write a Query to find Total_Medals,Gold Medals,Silver Medals and Bronze of Top 100 olympians with their country Name and sport Name.
+Query:
+SELECT ROW_NUMBER() OVER(order by Total desc,Gold desc,Silver desc,Bronze desc) AS Rank,
+        Name,
+        Sex,
+        Total AS Total_Medals,
+        IFNULL(Gold,0) AS Gold,
+        IFNULL(Silver,0) AS Silver,
+        IFNULL(Bronze,0) AS Bronze,
+        Sport,
+        Team AS Country 
+FROM (((SELECT Sport,Sex,Name,Team,ID AS fid,count(Medal) AS Total
+        FROM athlete
+        WHERE Medal='Gold'or Medal='Silver' OR Medal='Bronze'
+        GROUP BY ID,Name,Sport,Sex,Team) a0
+     LEFT JOIN 
+        (SELECT ID,count(Medal) AS Gold
+        FROM athlete
+        WHERE Medal='Gold'
+        GROUP BY  ID) a1
+     ON fid=a1.ID) p   
+     LEFT JOIN 
+        (SELECT ID,count(Medal) AS Silver
+        FROM athlete
+        WHERE Medal='Silver'
+        GROUP BY  ID) a2
+     ON fid=a2.ID) q     
+     LEFT JOIN    
+        (SELECT ID,count(Medal) AS Bronze
+        FROM athlete
+        WHERE Medal='Bronze'
+        GROUP BY  ID) a3
+     ON fid=a3.ID      
+ORDER BY  Rank            
+          
+              
+5) Write a Query to find Total_Medals,Gold Medals,Silver Medals,Bronze Medals of every country in the year 1912 with their rank.
+Query:
+SELECT ROW_NUMBER() OVER(order by Total desc,Gold desc,Silver desc,Bronze desc) AS Rank,
+       Country,
+       Total AS Total_Medals, 
+       IFNULL(Gold,0) AS Gold, 
+       IFNULL(Silver,0) AS Silver,
+       IFNULL(Bronze,0) AS Bronze
+FROM (((SELECT Team AS Country,count(Medal) AS Total
+        FROM athlete
+        WHERE Medal IN ('Gold','Silver','Bronze') AND year=1912
+        GROUP BY  Team) a0
+     LEFT JOIN     
+        (SELECT Team,count(Medal) AS Gold
+         FROM athlete
+         WHERE Medal='Gold' AND year=1912
+         GROUP BY  Team) a1
+     ON Country=a1.Team) p
+     LEFT JOIN   
+         (SELECT Team,count(Medal) AS Silver    
+          FROM athlete
+          WHERE Medal='Silver' AND year=1912
+          GROUP BY  Team) a2
+     ON Country=a2.Team) q  
+     LEFT JOIN  
+          (SELECT Team,count(Medal) AS Bronze
+           FROM athlete 
+           WHERE Medal='Bronze' AND year=1912       
+           GROUP BY  Team) a3
+      ON Country=a3.Team   
+ORDER BY  Rank
+        
+        
+        
+        
+                
+        
+        
