@@ -159,11 +159,40 @@ SELECT Year,Count(*) as Total_Participants
 
 
       Ankit:
-             1) write a query to display distinct player their country from India
-             2) display max weight of all time in olympics
-             3) which country received most medals in 2004
-             4) In which sport Indian won most medals from 1896-2006
-             5) in each year, for each country count of male and female  
+
+1) write a query to display distinct player their country from India
+select distinct Name from athlete where Team='India'
+
+
+
+                
+2) display max weight of all time in olympics
+
+select Name,max(weight) as weight,Team as Country,Sport from athlete group by Name,Team,Sport order by weight desc
+
+
+
+
+3) which country received most medals in 2004
+select Team as Country,count(Medal) as Total_Medals from athlete where Medal in ('Gold','Silver','Bronze') and Year=2004 group by Team
+
+
+
+4) In which sport Indian won most medals from 1896-2006
+
+select sport,count(medal) as Total_Medals from athlete where Team='India' and Medal in ('Gold','Silver','Bronze') group by sport order by Total_Medals desc
+
+
+
+5) in each year, for each country count of male and female  
+
+select r.year as year,IFNULL(F,0) as Female,M as Male from ((select distinct year from athlete) r \
+left join \
+(select year,count(sex) as F from athlete where sex='F' group by year) p \
+on r.year=p.year) \
+left join \
+(select year,count(sex) as M from athlete where sex='M' group by year) q \
+on r.year=q.year order by year
 
 
 
