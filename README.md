@@ -22,4 +22,4 @@ Project2,we are worked as a group to analyze large olympics dataset in Spark by 
 * After performing all the action try to create a .py file where write all the program using "vi" editor and save the file using esc + : + wq .
 * After saving the file give command "spark-submit file_name" it will execute the file using SPARK 2 version.
 ## Usage
-* Using this project any one can perform analysis with the Airlines dataset
+* Using this project any one can perform analysis with the olympics dataset.
