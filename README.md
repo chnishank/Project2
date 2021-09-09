@@ -23,3 +23,8 @@ Project2,we are worked as a group to analyze large olympics dataset in Spark by 
 * After saving the file give command "spark-submit file_name" it will execute the file using SPARK 2 version.
 ## Usage
 * Using this project any one can perform analysis with the olympics dataset.
+## Contributors
+* CH.Nishank
+* Chekurtha Sravani
+* Shetu Das
+* Ankith Sharma
