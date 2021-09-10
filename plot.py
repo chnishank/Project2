@@ -6,7 +6,7 @@ sns.set()
 olympic=pd.read_csv("athlete_events.csv")
 # print(olympic.head())
 
-#----------sex ratio------------------
+#----------sex ratio-----------------
 # sex_values=list(olympic["Sex"].value_counts())
 # sex_keys=list(olympic["Sex"].value_counts().keys())
 # print(sex_keys)
